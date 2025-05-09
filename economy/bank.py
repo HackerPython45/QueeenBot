@@ -30,15 +30,17 @@ class Bank(commands.Cog):
                 return await inter.response.send_message(f'❌ Недостаточно средств! Ваш баланс: {balance}', ephemeral=True)
 
         if внести is not None:
-            self.db.inc_bank(inter.guild.id, inter.author.id, int(внести))
+            amount = int(внести)
+            self.db.inc_bank(inter.guild.id, inter.author.id, amount)
             embed = disnake.Embed(title='Операции банка')
-            embed.add_field(name='', value=f'{inter.author.mention}, вы успешно положили `{внести}` на свой банковский счет')
+            embed.add_field(name='', value=f'{inter.author.mention}, вы успешно положили `{amount}` на свой банковский счет')
             embed.set_thumbnail(url=inter.author.avatar.url)
             await inter.response.send_message(embed=embed, ephemeral=True)
         if снять is not None:
-            self.db.un_inc_bank(inter.guild.id, int(снять))
+            amount = int(снять)
+            self.db.un_inc_bank(inter.guild.id, amount)
             embed = disnake.Embed(title='Операции банка')
-            embed.add_field(name='', value=f'{inter.author.mention}, вы успешно сняли `{снять}` со своего банковского счета')
+            embed.add_field(name='', value=f'{inter.author.mention}, вы успешно сняли `{amount}` со своего банковского счета')
             embed.set_thumbnail(url=inter.author.avatar.url)
             await inter.response.send_message(embed=embed, ephemeral=True)
 
