@@ -17,15 +17,13 @@ class AddMoney(commands.Cog):
 
         if сколько <= 0: return await inter.response.send_message('Вы не можете выдать меньше 0', ephemeral=True)
         if участник.bot: return await inter.response.send_message('Вы не можете выдать деньги боту', ephemeral=True)
-        if inter.author.guild_permissions.administrator:
-            embed = disnake.Embed(title=f'Уведомление',
-                description=f'На ваш счет поступило - `{сколько}`\nАдминистратор {inter.author.mention} выдал вам денег'
-            )
-            await участник.send(embed=embed)
-            self.db.add_money(inter.guild.id, участник.id, сколько)
-            await inter.response.send_message('Вы успешно выдали деньги', ephemeral=True)
-        else:
-            await inter.response.send_message('Вы не являетесь администратором', ephemeral=True)
+        embed = disnake.Embed(title=f'Уведомление',
+            description=f'На ваш счет поступило - `{сколько}`\nАдминистратор {inter.author.mention} выдал вам денег'
+        )
+        await участник.send(embed=embed)
+        self.db.add_money(inter.guild.id, участник.id, сколько)
+        await inter.response.send_message('Вы успешно выдали деньги', ephemeral=True)
+
 
 
 

@@ -19,15 +19,12 @@ class  RemoveMoney(commands.Cog):
         if сколько <= 0: return await inter.response.send_message('Вы не можете забрать меньше 0', ephemeral=True)
         if участник.bot: return await inter.response.send_message('Вы не можете выдать деньги боту', ephemeral=True)
         if user.get('balance') <= 0: return await inter.response.send_message('Вы не можете забрать деньги у пользователя когда его баланс равен 0 или меньше')
-        if inter.author.guild_permissions.administrator:
-            embed = disnake.Embed(title=f'Уведомление',
-                description=f'С вашего баланся забрали - `{сколько}`\nАдминистратор {inter.author.mention} забрал у вас денги'
-            )
-            await участник.send(embed=embed)
-            self.db.add_money(inter.guild.id, участник.id, сколько)
-            await inter.response.send_message('Вы успешно забрали денги', ephemeral=True)
-        else:
-            await inter.response.send_message('Вы не являетесь администратором', ephemeral=True)
+        embed = disnake.Embed(title=f'Уведомление',
+            description=f'С вашего баланся забрали - `{сколько}`\nАдминистратор {inter.author.mention} забрал у вас денги'
+        )
+        await участник.send(embed=embed)
+        self.db.add_money(inter.guild.id, участник.id, сколько)
+        await inter.response.send_message('Вы успешно забрали денги', ephemeral=True)
 
 def setup(bot):
     bot.add_cog(RemoveMoney(bot))
