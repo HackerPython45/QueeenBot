@@ -19,16 +19,24 @@ class Bank(commands.Cog):
         author = users.get(str(inter.author.id), {})
         if внести is not None and снять is not None: return await inter.response.send_message("❌ Нельзя одновременно вносить и снимать!", ephemeral=True)
         if not author.get('balance', 0): return await inter.response.send_message(f'Ваш баланс: {author.get("balance", 0)}', ephemeral=True)
-        if author.get('bank', 1) < снять: return await inter.response.send_message('Ошибка', ephemeral=True)
+        balance = author.get('balance', 0)
+        bank = author.get('bank', 0)
 
         if внести is not None:
-            self.db.inc_bank(inter.guild.id, inter.author.id, внести)
+            if balance < внести:
+                return await inter.response.send_message(f'❌ Недостаточно средств! Ваш баланс: {balance}', ephemeral=True)
+        if снять is not None:
+            if bank < снять:
+                return await inter.response.send_message(f'❌ Недостаточно средств! Ваш баланс: {balance}', ephemeral=True)
+
+        if внести is not None:
+            self.db.inc_bank(inter.guild.id, inter.author.id, int(внести))
             embed = disnake.Embed(title='Операции банка')
             embed.add_field(name='', value=f'{inter.author.mention}, вы успешно положили `{внести}` на свой банковский счет')
             embed.set_thumbnail(url=inter.author.avatar.url)
             await inter.response.send_message(embed=embed, ephemeral=True)
         if снять is not None:
-            self.db.un_inc_bank(inter.guild.id, снять)
+            self.db.un_inc_bank(inter.guild.id, int(снять))
             embed = disnake.Embed(title='Операции банка')
             embed.add_field(name='', value=f'{inter.author.mention}, вы успешно сняли `{снять}` со своего банковского счета')
             embed.set_thumbnail(url=inter.author.avatar.url)
