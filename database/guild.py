@@ -3,11 +3,12 @@ import disnake
 
 from disnake.ext import commands
 
+from dotenv import load_dotenv
 from pymongo import MongoClient
-
+load_dotenv()
 class Guild:
 
-    conn = MongoClient('mongodb+srv://Serj:Sladko.wera3@cluster0.1rtw0mc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+    conn = MongoClient(os.getenv('mongo_url'))
     db = conn.guld.gulddb
 
 
