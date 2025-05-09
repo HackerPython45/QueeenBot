@@ -19,16 +19,16 @@ async def on_ready():
     print('-----------------------------')
     print('------Queen Бот запущен------')
     print('-----------------------------')
-#     for guild in db.guilds:
-#         check_guild = database.find_one({"guild_id": guild.id})
-#         if not check_guild:
-#             database.create_table_guild(guild)
+    for guild in db.guilds:
+        check_guild = database.find_one({"guild_id": guild.id})
+        if not check_guild:
+            database.create_table_guild(guild)
                 
-# @db.event
-# async def on_guild_join(guild):
-#     check_guild = database.find_one({"guild_id": guild.id})
-#     if not check_guild:
-#         database.create_table_guild(guild)
+@db.event
+async def on_guild_join(guild):
+    check_guild = database.find_one({"guild_id": guild.id})
+    if not check_guild:
+        database.create_table_guild(guild)
 
 @db.event
 async def on_command_error(ctx, error):
@@ -66,7 +66,7 @@ db.load_extension('admin.antilink')
 db.load_extension('admin.settings')
 db.load_extension('admin.welcome')
 
-db.load_extension('admin.system_ticket')
+db.load_extension('progress.give_progress')
 
 if __name__ == "__main__":
     db.run(os.getenv('token'))

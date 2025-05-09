@@ -31,6 +31,7 @@ class Guild:
                 'channel_id_message': 0,
                 'welcome_channel_id': 0
             },
+            'progress_name': []
         }
         for member in guild.members:
             guild_data['economy']['users'][str(member.id)] = {
@@ -39,6 +40,7 @@ class Guild:
                 'exp': 0,
                 'bank': 0,
                 'warn': 0,
+                'progress': []
             }
 
         # Вставляем в базу данных
@@ -182,3 +184,14 @@ class Guild:
                 "settings.welcome_channel_id": channel
             }}                   
         )
+
+    def create_to_progress_guild(self, guild_id: int, progress: str):
+        self.db.update_one({"guild_id": guild_id}, {"$push": {"progress_name": progress}})
+
+    def give_progress_user(self, guild_id: int, user_id: int, progress: str):
+        self.db.update_one({'guild_id': guild_id},
+            {'$push': {
+                f"economy.users.{user_id}.progress": progress
+            }}
+        )
+        
