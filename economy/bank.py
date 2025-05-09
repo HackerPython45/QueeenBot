@@ -19,9 +19,7 @@ class Bank(commands.Cog):
         author = users.get(str(inter.author.id), {})
         if внести is not None and снять is not None: return await inter.response.send_message("❌ Нельзя одновременно вносить и снимать!", ephemeral=True)
         if not author.get('balance', 0): return await inter.response.send_message(f'Ваш баланс: {author.get("balance", 0)}', ephemeral=True)
-        if снять <= author.get('bank', 1): return await inter.response.send_message('Вы не можете снять с банка меньше чем у вас есть', ephemeral=True)
-        if внести <= author.get('balance', 1): return await inter.response.send_message('Вы не можете внести в банк меньше чем у вас есть', ephemeral=True)
-        if внести > author.get('balance', 1) : return await inter.response.send_message('Вы не можете положить на банк больше чем у вас на балансе', ephemeral=True)
+        if author.get('bank', 1) < снять: return await inter.response.send_message('Ошибка', ephemeral=True)
 
         if внести is not None:
             self.db.inc_bank(inter.guild.id, inter.author.id, внести)
