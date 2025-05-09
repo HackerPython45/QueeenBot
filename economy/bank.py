@@ -38,7 +38,7 @@ class Bank(commands.Cog):
             await inter.response.send_message(embed=embed, ephemeral=True)
         if снять is not None:
             amount = int(снять)
-            self.db.un_inc_bank(inter.guild.id, amount)
+            self.db.un_inc_bank(inter.guild.id, inter.author.id, amount)
             embed = disnake.Embed(title='Операции банка')
             embed.add_field(name='', value=f'{inter.author.mention}, вы успешно сняли `{amount}` со своего банковского счета')
             embed.set_thumbnail(url=inter.author.avatar.url)
