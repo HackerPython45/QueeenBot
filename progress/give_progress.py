@@ -10,7 +10,6 @@ class CreateProgress(commands.Cog):
         self.bot = bot
         self.db = Guild()
 
-
     @commands.has_permissions(administrator=True)
     @commands.slash_command(name='manager-progress-create', description='Создать новое достижение')
     async def manager_progress_create(self, inter, название: str = commands.Param(description='Введите название')):
@@ -22,6 +21,7 @@ class CreateProgress(commands.Cog):
             await inter.response.send_message(embed=embed, ephemeral=True)
         except:
             print('Ошибка')
+
 
 
 

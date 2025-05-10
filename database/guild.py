@@ -40,13 +40,13 @@ class Guild:
                 'exp': 0,
                 'bank': 0,
                 'warn': 0,
+                'likes': 0,
+                'reputation': 0,
                 'progress': []
             }
 
         # Вставляем в базу данных
         self.db.insert_one(guild_data)
-
-
 
     def find_one(self, query):
         return self.db.find_one(query)
@@ -194,4 +194,21 @@ class Guild:
                 f"economy.users.{user_id}.progress": progress
             }}
         )
+
+    def user_to_likes_users(self, guild_id: int, user_id: int):
+        self.db.update_one({"guild_id": guild_id},
+            {"$inc": {f"economy.users.{user_id}.likes": 1}}
+        )
+    def set_give_likes_user(self, guild_id: int, user_id: int, likes: int):
+        self.db.update_one({"guild_id": guild_id}, 
+            {"$inc": {
+                f"economy.users.{user_id}.likes": likes
+            }}
+        )
         
+    def set_give_reputation_user(self, guild_id: int, user_id: int, rep: int):
+        self.db.update_one({'guild_id': guild_id},
+            {"$inc": {
+                f"economy.users.{user_id}.reputation": rep
+            }}
+        )
