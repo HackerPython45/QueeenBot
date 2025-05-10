@@ -65,6 +65,7 @@ db.load_extension('admin.antibot')
 db.load_extension('admin.antilink')
 db.load_extension('admin.settings')
 db.load_extension('admin.welcome')
+db.load_extension('admin.set_reputation')
 
 db.load_extension('progress.give_progress')
 
