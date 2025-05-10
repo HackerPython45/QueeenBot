@@ -22,7 +22,7 @@ class SetReputation(commands.Cog):
 
     @commands.has_permissions(administrator=True)
     @commands.slash_command(name='unset-reputations', description='Забрать репутацию')
-    async def set_rep(self, inter, участник: disnake.Member = commands.Param(description='Выберите участника'), сколько: str = commands.Param(description='Сколько забрать')):
+    async def unset_rep(self, inter, участник: disnake.Member = commands.Param(description='Выберите участника'), сколько: str = commands.Param(description='Сколько забрать')):
         guild_info = self.db.find_one({"guil_id": inter.guild.id})
         user_info = guild_info['economy']['users']
         if сколько != участник(user_info.get('reputation')):
