@@ -17,7 +17,7 @@ class SetReputation(commands.Cog):
         guild_info = self.db.find_one({"guil_id": inter.guild.id})
         if int(сколько) <= 0: return await inter.response.send_message('Вы не можете выдать 0 или меньше 0 репутации', ephemeral=True)
 
-        self.db.set_give_reputation_user(inter.guid.id, участник.id, сколько)
+        self.db.set_give_reputation_user(inter.guild.id, участник.id, сколько)
         await inter.response.send_message(f'**Репутация** ({сколько}) было устоновлено {участник.mention}', ephemeral=True)
 
 
