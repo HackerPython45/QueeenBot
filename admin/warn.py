@@ -17,18 +17,20 @@ class Warn(commands.Cog):
         guild_info = self.db.find_one({'guild_id': inter.guild.id})
         users = guild_info['economy']['users']
         member = users.get(str(участник.id), {})
-        if участник.bot: return await inter.response.send_message('Вы не можете выдать warn боту', ephemeral=True)
-        check_warn = self.db.get_warn(inter.guild.id, участник.id)
-        new_warn = check_warn + 1
-        self.db.set_warn(inter.guild.id, участник.id)
-        embed = disnake.Embed(title='Предупреждение', description='Данный пользователь получил предупреждение')
-        embed.add_field(name='Администратор: ', value=f'> {inter.author.mention}')
-        embed.add_field(name='Нарушитель: ', value=f'> {участник.mention}')
-        embed.add_field(name='Причина: ', value=f'`{причина}`', inline=False)
-        embed.add_field(name='Кол-во предупреждений: ', value=f'`{new_warn}`/4', inline=False)
+        try:
+            if участник.bot: return await inter.response.send_message('Вы не можете выдать warn боту', ephemeral=True)
+            check_warn = self.db.get_warn(inter.guild.id, участник.id)
+            new_warn = check_warn + 1
+            self.db.set_warn(inter.guild.id, участник.id)
+            embed = disnake.Embed(title='Предупреждение', description='Данный пользователь получил предупреждение')
+            embed.add_field(name='Администратор: ', value=f'> {inter.author.mention}')
+            embed.add_field(name='Нарушитель: ', value=f'> {участник.mention}')
+            embed.add_field(name='Причина: ', value=f'`{причина}`', inline=False)
+            embed.add_field(name='Кол-во предупреждений: ', value=f'`{new_warn}`/4', inline=False)
 
-        await inter.response.send_message(embed=embed)
-
+            await inter.response.send_message(embed=embed)
+        except:
+            await inter.response.send_message('❌ Вы не являетесь администратором', ephemeral=True)
         
 
         if new_warn == 3:

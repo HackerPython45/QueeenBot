@@ -15,7 +15,7 @@ class Settings(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.slash_command(name='settings', description='Настройки бота')
     async def settings(self, inter):
-        if inter.author.guild_permissions.administrator:
+        try:
             guild_info = self.db.find_one({"guild_id": inter.guild.id})
             settings_info = guild_info['settings']
             find_channel = inter.guild.get_channel(settings_info.get('channel_id_message', 1))
@@ -26,6 +26,8 @@ class Settings(commands.Cog):
             embed.add_field(name='', value=f'Канал логов: {f"{find_channel.mention}" if find_channel else "Не установлено"}', inline=False)
             embed.add_field(name='', value=f'Канал приветствий: {f"{find_channel_welcome.mention}" if find_channel_welcome else "Не установлено"}', inline=False)
             await inter.response.send_message(embed=embed, view=SettingsButton(settings_info))
+        except:
+            await inter.response.send_message('❌ Вы не являетесь администратором', ephemeral=True)
 
 
 class SettingsButton(disnake.ui.View):
