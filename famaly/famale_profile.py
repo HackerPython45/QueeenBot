@@ -1,12 +1,12 @@
 import disnake
 
 from disnake.ext import commands
-from database.famaly import famaly  # Убедитесь, что название файла и класса правильное
+from database.famaly import Famaly  # Убедитесь, что название файла и класса правильное
 
 class FamProfile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.db = famaly()
+        self.db = Famaly()
         self.family_names = []  # Кэш для хранения названий семей
 
     async def update_family_cache(self):
