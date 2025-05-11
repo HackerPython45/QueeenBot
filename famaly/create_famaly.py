@@ -17,7 +17,7 @@ class CreateFamaly(commands.Cog):
     async def create_fam(self, inter, название: str = commands.Param(description='Введите название семьи', min_length=3, max_length=16)):
         fam_info = self.db.find_one({"fam_name": название})
         find_guild = self.dg.find_one({"guild_id": inter.guild.id})
-        find_leader = fam_info['leader']
+        # find_leader = fam_info['leader']
         find_channel = find_guild['settings']
         # if fam_info:
         #     return await inter.response.send_message(f'[Ошибка] Уже есть такая семья с таким названием, Лидер семьи: <@{find_leader}>', ephemeral=True)
