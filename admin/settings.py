@@ -192,7 +192,7 @@ class ChannelSelectFamaly(disnake.ui.ChannelSelect):
 
         channel_id = 1 if settings_info.get('new_fam_channel', 1) == 0 else 0
 
-        self.db.set_channel_id_welcome(inter.guild.id, int(select_channel))
+        self.db.set_channel_id_famaly(inter.guild.id, int(select_channel))
 
         await inter.response.send_message(embed=disnake.Embed(description=f'Вы успешно устоновили - <#{int(select_channel)}> канал для одобрение семьи'), ephemeral=True)
 

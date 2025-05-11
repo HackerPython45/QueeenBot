@@ -185,6 +185,13 @@ class Guild:
                 "settings.welcome_channel_id": channel
             }}                   
         )
+    def set_channel_id_famaly(self, guild_id: int, channel: int):
+        self.db.update_one({"guild_id": guild_id},
+            {'$set': {
+                "settings.new_fam_channel": channel
+            }}                   
+        )
+
 
     def create_to_progress_guild(self, guild_id: int, progress: str):
         self.db.update_one({"guild_id": guild_id}, {"$push": {"progress_name": progress}})
