@@ -20,11 +20,13 @@ class Settings(commands.Cog):
             settings_info = guild_info['settings']
             find_channel = inter.guild.get_channel(settings_info.get('channel_id_message', 1))
             find_channel_welcome = inter.guild.get_channel(settings_info.get('welcome_channel_id', 1))
+            find_channel_famaly = inter.guild.get_channel(settings_info.get('new_fam_channel', 1))
             embed = disnake.Embed(title='Настройки')
             embed.add_field(name='', value=f'Анти-бот: {"вкл ✅" if settings_info.get("antibot", 1) == 1 else "выкл ❌"}', inline=False)
             embed.add_field(name='', value=f'Анти-Линк: {"вкл ✅" if settings_info.get("antilink", 1) == 1 else "выкл ❌"}', inline=False)
             embed.add_field(name='', value=f'Канал логов: {f"{find_channel.mention}" if find_channel else "Не установлено"}', inline=False)
             embed.add_field(name='', value=f'Канал приветствий: {f"{find_channel_welcome.mention}" if find_channel_welcome else "Не установлено"}', inline=False)
+            embed.add_field(name='', value=f'Система семьи: {f"✅Вкл: {find_channel_famaly.mention}" if find_channel_famaly else "Не установлено"}', inline=False)
             await inter.response.send_message(embed=embed, view=SettingsButton(settings_info))
         except:
             await inter.response.send_message('❌ Вы не являетесь администратором', ephemeral=True)
@@ -38,12 +40,14 @@ class SettingsButton(disnake.ui.View):
         self.antilink = settings_info.get('antilink', 1)
         self.antibot = settings_info.get('antibot', 1)
         self.welcome = settings_info.get('welcome_channel_id', 1)
+        self.famaly = settings_info.get('new_fam_channel', 1)
 
 
         self.add_item(self.create_anti_bot_button())
         self.add_item(self.create_anti_link_button())
         self.add_item(self.channel_send_message())
         self.add_item(self.welcome_channel_button())
+        self.add_item(self.system_famaly())
 
 
     def create_anti_bot_button(self):
@@ -63,6 +67,11 @@ class SettingsButton(disnake.ui.View):
         )
         button.callback = self.anti_link_button
         return button
+    
+    def system_famaly(self):
+        button = disnake.ui.Button(label='Система семьи', style=disnake.ButtonStyle.danger if self.famaly == 1 else disnake.ButtonStyle.success)
+        button.callback = self.system_famaly_button
+        return button
 
     def channel_send_message(self):
         button = disnake.ui.Button(label='Канал для логов', style=disnake.ButtonStyle.gray, row=1, custom_id='channel_id_send')
@@ -73,6 +82,11 @@ class SettingsButton(disnake.ui.View):
         button = disnake.ui.Button(label='Приветствие', style=disnake.ButtonStyle.gray, custom_id='welcome_button_callback', row=1)
         button.callback = self.welcome_button_callback
         return  button
+    
+    async def system_famaly_button(self, inter: disnake.Interaction):
+        view = disnake.ui.View()
+        view.add_item(ChannelSelectFamaly())
+        await inter.response.send_message(embed=disnake.Embed(description='Выберите канал'), view=view, ephemeral=True)
     
     async def welcome_button_callback(self, inter: disnake.Interaction):
         view = disnake.ui.View()
@@ -162,6 +176,26 @@ class ChannelSelectWelcome(disnake.ui.ChannelSelect):
         self.db.set_channel_id_welcome(inter.guild.id, int(select_channel))
 
         await inter.response.send_message(embed=disnake.Embed(description=f'Вы успешно устоновили - <#{int(select_channel)}> канал для приветствие'), ephemeral=True)
+
+
+class ChannelSelectFamaly(disnake.ui.ChannelSelect):
+    def __init__(self):
+        self.db = Guild()
+        super().__init__(placeholder='Выберите канал', channel_types=[disnake.ChannelType.text], max_values=1, min_values=1, custom_id='channel_select_welcome')
+
+    async def callback(self, inter: disnake.MessageInteraction):
+        select_channel = inter.values[0]
+        self.view.select_channel = select_channel
+
+        guild_info = self.db.find_one({"guild_id": inter.guild.id})
+        settings_info = guild_info['settings']
+
+        channel_id = 1 if settings_info.get('new_fam_channel', 1) == 0 else 0
+
+        self.db.set_channel_id_welcome(inter.guild.id, int(select_channel))
+
+        await inter.response.send_message(embed=disnake.Embed(description=f'Вы успешно устоновили - <#{int(select_channel)}> канал для одобрение семьи'), ephemeral=True)
+
 
 def setup(bot):
     bot.add_cog(Settings(bot))

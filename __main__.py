@@ -67,6 +67,8 @@ db.load_extension('admin.settings')
 db.load_extension('admin.welcome')
 db.load_extension('admin.set_reputation')
 
+db.load_extension('famaly.create_famaly')
+
 db.load_extension('progress.give_progress')
 
 if __name__ == "__main__":
