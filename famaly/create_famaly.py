@@ -19,8 +19,8 @@ class CreateFamaly(commands.Cog):
         find_guild = self.dg.find_one({"guild_id": inter.guild.id})
         find_leader = fam_info['leader']
         find_channel = find_guild['settings']
-        if fam_info:
-            return await inter.response.send_message(f'[Ошибка] Уже есть такая семья с таким названием, Лидер семьи: <@{find_leader}>', ephemeral=True)
+        # if fam_info:
+        #     return await inter.response.send_message(f'[Ошибка] Уже есть такая семья с таким названием, Лидер семьи: <@{find_leader}>', ephemeral=True)
         
         if not find_channel.get('new_fam_channel', 0):
             return await inter.response.send_message(f'[Ошибка] В данный момент создание семьи отключено, обратитесь в Создателю сервера что бы включил', ephemeral=True)
