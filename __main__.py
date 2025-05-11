@@ -68,6 +68,7 @@ db.load_extension('admin.welcome')
 db.load_extension('admin.set_reputation')
 
 db.load_extension('famaly.create_famaly')
+db.load_extension('famaly.famale_profile')
 
 db.load_extension('progress.give_progress')
 
