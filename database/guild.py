@@ -29,7 +29,8 @@ class Guild:
                 'antispwam': 0,
                 'antilink': 0,
                 'channel_id_message': 0,
-                'welcome_channel_id': 0
+                'welcome_channel_id': 0,
+                'new_fam_channel': 0
             },
             'progress_name': []
         }
