@@ -1,7 +1,7 @@
 import disnake
 
 from disnake.ext import commands
-from database.family import famaly  # Убедитесь, что название файла и класса правильное
+from database.famaly import famaly  # Убедитесь, что название файла и класса правильное
 
 class FamProfile(commands.Cog):
     def __init__(self, bot):
