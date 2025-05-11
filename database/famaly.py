@@ -41,6 +41,13 @@ class Famaly(object):
             print(f'[Ошибка] Не удалось создать семью: {e}')
             return False
 
+    def find_one(self, query):
+        return self.db.find_one(query)
+    
+
+    def find(self, query):
+        return self.db.find(query)
+
     def invite_member(self, fam_name: str, user_id: int, accesse_level: int =1, role: str = 'Участник'):
         family = self.db.find_one({"fam_name": fam_name})
         if not fam_name:
