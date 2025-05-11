@@ -28,7 +28,7 @@ class CreateFamaly(commands.Cog):
 
         embed = disnake.Embed(title='Заявка на создание семьи')
         embed.add_field(name='> Подал: ', value=f'{inter.author.name} | {inter.author.mention}', inline=False)
-        embed.add_field(name='> Название: ', value=f'`{название}`', ephemeral=True)
+        embed.add_field(name='> Название: ', value=f'`{название}`', inline=False)
         channel = inter.guild.get_channel(find_channel.get('new_fam_channel', 0))
         if channel:
             await channel.send(embed=embed)
