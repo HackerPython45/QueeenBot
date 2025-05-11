@@ -62,7 +62,10 @@ class Famaly(object):
                 "role": role
             }}})
         return True
-    
+
+    def find_one(self, query):
+        return self.db.find_one(query)
+
     def remove_member(self, fam_name: str, user_id: int):
         self.db.update_one({"fam_name": fam_name}, {"$unset": {f"members.{user_id}": ""}})
         return True
