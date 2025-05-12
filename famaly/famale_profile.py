@@ -7,25 +7,35 @@ class FamProfile(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.db = Famaly()
-        self.family_names = []  # Кэш для хранения названий семей
 
-    async def update_family_cache(self):
-        """Обновляет кэш с названиями семей"""
-        families = await self.db.find({}, {"fam_name": 1}).to_list(None)
-        self.family_names = [fam["fam_name"] for fam in families]
-
-    @commands.slash_command(name='fam-profile', description='Профиль семьи')
+    @commands.slash_command(name="fam-profile", description="Профиль семьи")
     async def fam_prof(
         self,
         inter: disnake.ApplicationCommandInteraction,
         семья: str = commands.Param(
             name="семья",
             description="Выберите семью из списка",
-            # Используем лямбду для доступа к self
-            choices=lambda: [disnake.OptionChoice(name=name) for name in self.family_names]
+            autocomplete=True  # Включаем автодополнение
         )
     ):
-        """Обработчик команды профиля семьи"""
+        await inter.response.send_message(f"Профиль семьи: **{семья}**")
+
+    # Автодополнение для параметра "семья" (динамическая загрузка из MongoDB)
+    @fam_prof.autocomplete("семья")
+    async def family_autocomplete(
+        self,
+        inter: disnake.ApplicationCommandInteraction,
+        query: str
+    ) -> list[disnake.app_commands.Choice]:
+        # Получаем семьи из MongoDB (ищем по частичному совпадению)
+        families = await self.db.families.find(
+            {"fam_name": {"$regex": f".*{query}.*", "$options": "i"}}
+        ).to_list(length=25)
+        
+        return [
+            disnake.app_commands.Choice(name=family["fam_name"], value=family["fam_name"])
+            for family in families
+        ]
         fam_info = await self.db.find_one({"fam_name": семья})
         if not fam_info:
             return await inter.response.send_message("Семья не найдена!", ephemeral=True)
@@ -34,10 +44,6 @@ class FamProfile(commands.Cog):
         # Добавьте нужные поля в embed
         await inter.response.send_message(embed=embed)
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        """Обновляем кэш при запуске бота"""
-        await self.update_family_cache()
 
 def setup(bot):
     bot.add_cog(FamProfile(bot))
