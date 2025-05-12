@@ -220,3 +220,6 @@ class Guild:
                 f"economy.users.{user_id}.reputation": rep
             }}
         )
+
+    def susse_premium(self, guild_id: int):
+        self.db.update_one({"guild_id": guild_id}, {"$set": {"premium": 1}})

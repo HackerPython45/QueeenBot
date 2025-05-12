@@ -52,6 +52,7 @@ db.load_extension('other.help')
 db.load_extension('other.offers')
 db.load_extension('other.voting')
 db.load_extension('other.info')
+db.load_extension('other.premium')
 
 
 db.load_extension('admin.ban')
